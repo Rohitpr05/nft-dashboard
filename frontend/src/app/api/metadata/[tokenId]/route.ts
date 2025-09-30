@@ -1,5 +1,5 @@
-export async function GET(request: Request, { params }: { params: Promise<{ tokenId: string }> }) {
-  const { tokenId } = await params
+export async function GET(request: Request, { params }: { params: { tokenId: string } }) {
+  const { tokenId } = params
 
   try {
     // Generate varied mood and visual characteristics

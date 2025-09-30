@@ -16,6 +16,10 @@ export type { IERC721Errors } from "./@openzeppelin/contracts/interfaces/draft-I
 export { IERC721Errors__factory } from "./factories/@openzeppelin/contracts/interfaces/draft-IERC6093.sol/IERC721Errors__factory";
 export type { ERC721 } from "./@openzeppelin/contracts/token/ERC721/ERC721";
 export { ERC721__factory } from "./factories/@openzeppelin/contracts/token/ERC721/ERC721__factory";
+export type { ERC721Enumerable } from "./@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable";
+export { ERC721Enumerable__factory } from "./factories/@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable__factory";
+export type { IERC721Enumerable } from "./@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable";
+export { IERC721Enumerable__factory } from "./factories/@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable__factory";
 export type { IERC721Metadata } from "./@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata";
 export { IERC721Metadata__factory } from "./factories/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata__factory";
 export type { IERC721 } from "./@openzeppelin/contracts/token/ERC721/IERC721";

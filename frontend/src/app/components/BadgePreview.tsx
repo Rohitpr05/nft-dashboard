@@ -1,27 +1,70 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { mintNFT, getNFTsForAddress, listenForTransferEvents } from '@/utils/web3'
 
 interface BadgePreviewProps {
   account: string
 }
 
 export default function BadgePreview({ account }: BadgePreviewProps) {
-  const [userNFTs, setUserNFTs] = useState<number[]>([])
+  const [userNFTs, setUserNFTs] = useState<string[]>([])
   const [isMinting, setIsMinting] = useState(false)
-  const [lastMintedId, setLastMintedId] = useState<number | null>(null)
+  const [lastMintedId, setLastMintedId] = useState<string | null>(null)
   const [previewImage, setPreviewImage] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [lastTxHash, setLastTxHash] = useState('')
 
+  // Load user's NFTs when account changes
+  useEffect(() => {
+    if (account) {
+      fetchUserNFTs()
+      
+      // Listen for new transfers to this account
+      const unsubscribe = listenForTransferEvents((event) => {
+        if (event.to.toLowerCase() === account.toLowerCase()) {
+          console.log('New NFT transfer detected:', event)
+          setLastMintedId(event.tokenId)
+          fetchUserNFTs()
+        }
+      });
+      
+      // Cleanup listener when component unmounts or account changes
+      return unsubscribe
+    }
+  }, [account])
+
+  // Generate preview when lastMintedId changes
   useEffect(() => {
     if (lastMintedId) {
       generatePreview(lastMintedId)
     }
   }, [lastMintedId])
+  
+  // Fetch user's NFTs
+  const fetchUserNFTs = async () => {
+    if (!account) return
+    
+    try {
+      setLoading(true)
+      const tokens = await getNFTsForAddress(account)
+      setUserNFTs(tokens)
+      
+      // If user has tokens, show the last one
+      if (tokens.length > 0) {
+        const lastToken = tokens[tokens.length - 1]
+        setLastMintedId(lastToken)
+        generatePreview(lastToken)
+      }
+    } catch (error) {
+      console.error('Error fetching NFTs:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
-  const generatePreview = async (tokenId: number) => {
+  const generatePreview = async (tokenId: string) => {
     try {
       const response = await fetch(`/api/metadata/${tokenId}`)
       const metadata = await response.json()
@@ -31,7 +74,7 @@ export default function BadgePreview({ account }: BadgePreviewProps) {
     }
   }
 
-  const simulateMint = async () => {
+  const handleMint = async () => {
     if (!account) {
       alert('Please connect your wallet first!')
       return
@@ -41,36 +84,29 @@ export default function BadgePreview({ account }: BadgePreviewProps) {
     setError('')
     
     try {
-      // Simulate transaction
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      // Execute actual minting transaction
+      const tx = await mintNFT()
+      setLastTxHash(tx.hash)
       
-      const newTokenId = userNFTs.length + 1
-      const fakeHash = '0x814458b9fbe4d7b0a90c94665b627d8810d719739990404d04f11f20415b19dc'
+      alert(`Transaction sent! Hash: ${tx.hash}`)
       
-      setLastTxHash(fakeHash)
-      setUserNFTs(prev => [...prev, newTokenId])
-      setLastMintedId(newTokenId)
+      // Wait for confirmation and get the tokenId
+      const receipt = await tx.wait()
+      setLastMintedId(receipt.tokenId)
       
-      alert(`Transaction sent! Hash: ${fakeHash}`)
-      
-      // Update preview after minting
-      setTimeout(() => {
-        generatePreview(newTokenId)
-      }, 1000)
+      // Refresh the user's NFTs
+      fetchUserNFTs()
       
     } catch (error: any) {
       console.error('Minting failed:', error)
-      setError(`Minting failed: ${error.message}`)
+      setError(`Minting failed: ${error.message || 'Unknown error'}`)
     } finally {
       setIsMinting(false)
     }
   }
 
   const refreshNFTs = () => {
-    // Force refresh the NFT data
-    if (lastMintedId) {
-      generatePreview(lastMintedId)
-    }
+    fetchUserNFTs()
   }
 
   return (
@@ -138,7 +174,7 @@ export default function BadgePreview({ account }: BadgePreviewProps) {
         {/* Buttons */}
         <div className="space-y-2">
           <button
-            onClick={simulateMint}
+            onClick={handleMint}
             disabled={!account || isMinting}
             className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
           >
@@ -150,7 +186,7 @@ export default function BadgePreview({ account }: BadgePreviewProps) {
               onClick={refreshNFTs}
               className="btn-secondary w-full text-sm"
             >
-              Refresh NFT Preview
+              Refresh NFT Collection
             </button>
           )}
         </div>
@@ -163,10 +199,10 @@ export default function BadgePreview({ account }: BadgePreviewProps) {
             <div className="bg-gray-800/50 p-2 rounded">
               <div className="text-yellow-400 mb-1">📋 Next Steps:</div>
               <div className="text-left space-y-1">
-                <div>1. Click the Etherscan link above</div>
-                <div>2. Check if transaction shows "Success"</div>
-                <div>3. Look for "Transfer" event in transaction logs</div>
-                <div>4. If successful, NFT should appear in your wallet</div>
+                <div>1. Wait for transaction confirmation</div>
+                <div>2. Your NFT will appear in your wallet</div>
+                <div>3. NFT appearance changes with market conditions</div>
+                <div>4. Check Etherscan for transaction details</div>
               </div>
             </div>
           )}

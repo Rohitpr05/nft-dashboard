@@ -21,52 +21,30 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../common";
+} from "../../../../../common";
 
-export interface MoodNFTInterface extends Interface {
+export interface IERC721EnumerableInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "MAX_SUPPLY"
       | "approve"
       | "balanceOf"
       | "getApproved"
       | "isApprovedForAll"
-      | "mint"
-      | "mintPrice"
-      | "name"
-      | "owner"
       | "ownerOf"
-      | "renounceOwnership"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
-      | "setBaseURI"
       | "supportsInterface"
-      | "symbol"
       | "tokenByIndex"
       | "tokenOfOwnerByIndex"
-      | "tokenURI"
-      | "tokensOfOwner"
       | "totalSupply"
       | "transferFrom"
-      | "transferOwnership"
-      | "withdraw"
   ): FunctionFragment;
 
   getEvent(
-    nameOrSignatureOrTopic:
-      | "Approval"
-      | "ApprovalForAll"
-      | "BaseURIChanged"
-      | "MoodNFTMinted"
-      | "OwnershipTransferred"
-      | "Transfer"
+    nameOrSignatureOrTopic: "Approval" | "ApprovalForAll" | "Transfer"
   ): EventFragment;
 
-  encodeFunctionData(
-    functionFragment: "MAX_SUPPLY",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "approve",
     values: [AddressLike, BigNumberish]
@@ -83,17 +61,9 @@ export interface MoodNFTInterface extends Interface {
     functionFragment: "isApprovedForAll",
     values: [AddressLike, AddressLike]
   ): string;
-  encodeFunctionData(functionFragment: "mint", values?: undefined): string;
-  encodeFunctionData(functionFragment: "mintPrice", values?: undefined): string;
-  encodeFunctionData(functionFragment: "name", values?: undefined): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
     values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "renounceOwnership",
-    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "safeTransferFrom(address,address,uint256)",
@@ -107,12 +77,10 @@ export interface MoodNFTInterface extends Interface {
     functionFragment: "setApprovalForAll",
     values: [AddressLike, boolean]
   ): string;
-  encodeFunctionData(functionFragment: "setBaseURI", values: [string]): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
   ): string;
-  encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "tokenByIndex",
     values: [BigNumberish]
@@ -122,14 +90,6 @@ export interface MoodNFTInterface extends Interface {
     values: [AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "tokenURI",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "tokensOfOwner",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
     functionFragment: "totalSupply",
     values?: undefined
   ): string;
@@ -137,13 +97,7 @@ export interface MoodNFTInterface extends Interface {
     functionFragment: "transferFrom",
     values: [AddressLike, AddressLike, BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "transferOwnership",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
 
-  decodeFunctionResult(functionFragment: "MAX_SUPPLY", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
@@ -154,15 +108,7 @@ export interface MoodNFTInterface extends Interface {
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "mintPrice", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "renounceOwnership",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "safeTransferFrom(address,address,uint256)",
     data: BytesLike
@@ -175,23 +121,16 @@ export interface MoodNFTInterface extends Interface {
     functionFragment: "setApprovalForAll",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "setBaseURI", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "tokenByIndex",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "tokenOfOwnerByIndex",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "tokensOfOwner",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -202,11 +141,6 @@ export interface MoodNFTInterface extends Interface {
     functionFragment: "transferFrom",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "transferOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 }
 
 export namespace ApprovalEvent {
@@ -249,44 +183,6 @@ export namespace ApprovalForAllEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace BaseURIChangedEvent {
-  export type InputTuple = [newBaseURI: string];
-  export type OutputTuple = [newBaseURI: string];
-  export interface OutputObject {
-    newBaseURI: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace MoodNFTMintedEvent {
-  export type InputTuple = [minter: AddressLike, tokenId: BigNumberish];
-  export type OutputTuple = [minter: string, tokenId: bigint];
-  export interface OutputObject {
-    minter: string;
-    tokenId: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace OwnershipTransferredEvent {
-  export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
-  export type OutputTuple = [previousOwner: string, newOwner: string];
-  export interface OutputObject {
-    previousOwner: string;
-    newOwner: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
 export namespace TransferEvent {
   export type InputTuple = [
     from: AddressLike,
@@ -305,11 +201,11 @@ export namespace TransferEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface MoodNFT extends BaseContract {
-  connect(runner?: ContractRunner | null): MoodNFT;
+export interface IERC721Enumerable extends BaseContract {
+  connect(runner?: ContractRunner | null): IERC721Enumerable;
   waitForDeployment(): Promise<this>;
 
-  interface: MoodNFTInterface;
+  interface: IERC721EnumerableInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -348,8 +244,6 @@ export interface MoodNFT extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  MAX_SUPPLY: TypedContractMethod<[], [bigint], "view">;
-
   approve: TypedContractMethod<
     [to: AddressLike, tokenId: BigNumberish],
     [void],
@@ -366,17 +260,7 @@ export interface MoodNFT extends BaseContract {
     "view"
   >;
 
-  mint: TypedContractMethod<[], [void], "payable">;
-
-  mintPrice: TypedContractMethod<[], [bigint], "view">;
-
-  name: TypedContractMethod<[], [string], "view">;
-
-  owner: TypedContractMethod<[], [string], "view">;
-
   ownerOf: TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
-
-  renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
 
   "safeTransferFrom(address,address,uint256)": TypedContractMethod<
     [from: AddressLike, to: AddressLike, tokenId: BigNumberish],
@@ -401,15 +285,11 @@ export interface MoodNFT extends BaseContract {
     "nonpayable"
   >;
 
-  setBaseURI: TypedContractMethod<[baseURI: string], [void], "nonpayable">;
-
   supportsInterface: TypedContractMethod<
     [interfaceId: BytesLike],
     [boolean],
     "view"
   >;
-
-  symbol: TypedContractMethod<[], [string], "view">;
 
   tokenByIndex: TypedContractMethod<[index: BigNumberish], [bigint], "view">;
 
@@ -419,10 +299,6 @@ export interface MoodNFT extends BaseContract {
     "view"
   >;
 
-  tokenURI: TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
-
-  tokensOfOwner: TypedContractMethod<[owner: AddressLike], [bigint[]], "view">;
-
   totalSupply: TypedContractMethod<[], [bigint], "view">;
 
   transferFrom: TypedContractMethod<
@@ -431,21 +307,10 @@ export interface MoodNFT extends BaseContract {
     "nonpayable"
   >;
 
-  transferOwnership: TypedContractMethod<
-    [newOwner: AddressLike],
-    [void],
-    "nonpayable"
-  >;
-
-  withdraw: TypedContractMethod<[], [void], "nonpayable">;
-
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
   ): T;
 
-  getFunction(
-    nameOrSignature: "MAX_SUPPLY"
-  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "approve"
   ): TypedContractMethod<
@@ -467,23 +332,8 @@ export interface MoodNFT extends BaseContract {
     "view"
   >;
   getFunction(
-    nameOrSignature: "mint"
-  ): TypedContractMethod<[], [void], "payable">;
-  getFunction(
-    nameOrSignature: "mintPrice"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "name"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "owner"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
     nameOrSignature: "ownerOf"
   ): TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
-  getFunction(
-    nameOrSignature: "renounceOwnership"
-  ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "safeTransferFrom(address,address,uint256)"
   ): TypedContractMethod<
@@ -511,14 +361,8 @@ export interface MoodNFT extends BaseContract {
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "setBaseURI"
-  ): TypedContractMethod<[baseURI: string], [void], "nonpayable">;
-  getFunction(
     nameOrSignature: "supportsInterface"
   ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;
-  getFunction(
-    nameOrSignature: "symbol"
-  ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "tokenByIndex"
   ): TypedContractMethod<[index: BigNumberish], [bigint], "view">;
@@ -530,12 +374,6 @@ export interface MoodNFT extends BaseContract {
     "view"
   >;
   getFunction(
-    nameOrSignature: "tokenURI"
-  ): TypedContractMethod<[tokenId: BigNumberish], [string], "view">;
-  getFunction(
-    nameOrSignature: "tokensOfOwner"
-  ): TypedContractMethod<[owner: AddressLike], [bigint[]], "view">;
-  getFunction(
     nameOrSignature: "totalSupply"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
@@ -545,12 +383,6 @@ export interface MoodNFT extends BaseContract {
     [void],
     "nonpayable"
   >;
-  getFunction(
-    nameOrSignature: "transferOwnership"
-  ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "withdraw"
-  ): TypedContractMethod<[], [void], "nonpayable">;
 
   getEvent(
     key: "Approval"
@@ -565,27 +397,6 @@ export interface MoodNFT extends BaseContract {
     ApprovalForAllEvent.InputTuple,
     ApprovalForAllEvent.OutputTuple,
     ApprovalForAllEvent.OutputObject
-  >;
-  getEvent(
-    key: "BaseURIChanged"
-  ): TypedContractEvent<
-    BaseURIChangedEvent.InputTuple,
-    BaseURIChangedEvent.OutputTuple,
-    BaseURIChangedEvent.OutputObject
-  >;
-  getEvent(
-    key: "MoodNFTMinted"
-  ): TypedContractEvent<
-    MoodNFTMintedEvent.InputTuple,
-    MoodNFTMintedEvent.OutputTuple,
-    MoodNFTMintedEvent.OutputObject
-  >;
-  getEvent(
-    key: "OwnershipTransferred"
-  ): TypedContractEvent<
-    OwnershipTransferredEvent.InputTuple,
-    OwnershipTransferredEvent.OutputTuple,
-    OwnershipTransferredEvent.OutputObject
   >;
   getEvent(
     key: "Transfer"
@@ -616,39 +427,6 @@ export interface MoodNFT extends BaseContract {
       ApprovalForAllEvent.InputTuple,
       ApprovalForAllEvent.OutputTuple,
       ApprovalForAllEvent.OutputObject
-    >;
-
-    "BaseURIChanged(string)": TypedContractEvent<
-      BaseURIChangedEvent.InputTuple,
-      BaseURIChangedEvent.OutputTuple,
-      BaseURIChangedEvent.OutputObject
-    >;
-    BaseURIChanged: TypedContractEvent<
-      BaseURIChangedEvent.InputTuple,
-      BaseURIChangedEvent.OutputTuple,
-      BaseURIChangedEvent.OutputObject
-    >;
-
-    "MoodNFTMinted(address,uint256)": TypedContractEvent<
-      MoodNFTMintedEvent.InputTuple,
-      MoodNFTMintedEvent.OutputTuple,
-      MoodNFTMintedEvent.OutputObject
-    >;
-    MoodNFTMinted: TypedContractEvent<
-      MoodNFTMintedEvent.InputTuple,
-      MoodNFTMintedEvent.OutputTuple,
-      MoodNFTMintedEvent.OutputObject
-    >;
-
-    "OwnershipTransferred(address,address)": TypedContractEvent<
-      OwnershipTransferredEvent.InputTuple,
-      OwnershipTransferredEvent.OutputTuple,
-      OwnershipTransferredEvent.OutputObject
-    >;
-    OwnershipTransferred: TypedContractEvent<
-      OwnershipTransferredEvent.InputTuple,
-      OwnershipTransferredEvent.OutputTuple,
-      OwnershipTransferredEvent.OutputObject
     >;
 
     "Transfer(address,address,uint256)": TypedContractEvent<
