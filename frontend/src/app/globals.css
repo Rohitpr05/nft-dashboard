@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: rgb(17 24 39);
+  color: white;
+}
+
+.card {
+  background-color: rgb(31 41 55);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid rgb(75 85 99);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+.btn-primary {
+  background: linear-gradient(to right, rgb(236 72 153), rgb(168 85 247));
+  color: white;
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  transform: scale(1.05);
+}
+
+.btn-secondary {
+  background-color: rgb(55 65 81);
+  color: white;
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(75 85 99);
+  transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+  border-color: rgb(96 165 250);
+  box-shadow: 0 0 20px rgb(96 165 250 / 0.3);
+}
+
+.glow-text {
+  background: linear-gradient(to right, rgb(244 114 182), rgb(96 165 250));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
